@@ -410,6 +410,10 @@ private fun TopicRow(topic: String, expanded: Boolean, onClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .animateContentSize( animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                ))
         ) {
             Row {
                 Icon(
