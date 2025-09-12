@@ -34,32 +34,32 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent {
-            CraneTheme {
-                MainScreen(onExploreItemClicked = {
-                    launchDetailsActivity(
-                        context = this,
-                        item = it
-                    )
-                })
-            }
-        }
+    setContent {
+      CraneTheme {
+        MainScreen(onExploreItemClicked = {
+          launchDetailsActivity(
+            context = this,
+            item = it
+          )
+        })
+      }
     }
+  }
 }
 
 @Composable
 private fun MainScreen(onExploreItemClicked: OnExploreItemClicked) {
-    Surface(color = MaterialTheme.colors.primary) {
-        var showLandingScreen by remember { mutableStateOf(true) }
-        if (showLandingScreen) {
-            LandingScreen(onTimeout = { showLandingScreen = false })
-        } else {
-            CraneHome(onExploreItemClicked = onExploreItemClicked)
-        }
+  Surface(color = MaterialTheme.colors.primary) {
+    var showLandingScreen by remember { mutableStateOf(true) }
+    if (showLandingScreen) {
+      LandingScreen(onTimeout = { showLandingScreen = false })
+    } else {
+      CraneHome(onExploreItemClicked = onExploreItemClicked)
     }
+  }
 }

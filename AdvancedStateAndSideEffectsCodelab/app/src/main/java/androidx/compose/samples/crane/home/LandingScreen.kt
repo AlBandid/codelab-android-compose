@@ -33,15 +33,15 @@ private const val SplashWaitTime: Long = 2000
 
 @Composable
 fun LandingScreen(onTimeout: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        // TODO Codelab: LaunchedEffect and rememberUpdatedState step
-        val currentOnTimeout by rememberUpdatedState(onTimeout)
+  Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    // TODO Codelab: LaunchedEffect and rememberUpdatedState step
+    val currentOnTimeout by rememberUpdatedState(onTimeout)
 
-        LaunchedEffect(Unit) {
-            delay(SplashWaitTime)
-            currentOnTimeout()
-        }
-        // TODO: Make LandingScreen disappear after loading data
-        Image(painterResource(id = R.drawable.ic_crane_drawer), contentDescription = null)
+    LaunchedEffect(Unit) {
+      delay(SplashWaitTime)
+      currentOnTimeout()
     }
+    // TODO: Make LandingScreen disappear after loading data
+    Image(painterResource(id = R.drawable.ic_crane_drawer), contentDescription = null)
+  }
 }

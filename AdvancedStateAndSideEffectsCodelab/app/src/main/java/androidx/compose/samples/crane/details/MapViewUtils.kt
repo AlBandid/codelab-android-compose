@@ -34,43 +34,43 @@ import com.google.android.libraries.maps.MapView
  */
 
 private fun getMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
-    LifecycleEventObserver { _, event ->
-        when(event) {
-            Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
-            Lifecycle.Event.ON_START -> mapView.onStart()
-            Lifecycle.Event.ON_RESUME -> mapView.onResume()
-            Lifecycle.Event.ON_PAUSE -> mapView.onPause()
-            Lifecycle.Event.ON_STOP -> mapView.onStop()
-            Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
-            else -> throw IllegalStateException()
-        }
+  LifecycleEventObserver { _, event ->
+    when(event) {
+      Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+      Lifecycle.Event.ON_START -> mapView.onStart()
+      Lifecycle.Event.ON_RESUME -> mapView.onResume()
+      Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+      Lifecycle.Event.ON_STOP -> mapView.onStop()
+      Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+      else -> throw IllegalStateException()
     }
+  }
 
 @Composable
 fun rememberMapViewWithLifecycle(): MapView {
-    val context = LocalContext.current
-    val mapView = remember {
-        MapView(context).apply {
-            id = R.id.map
-        }
+  val context = LocalContext.current
+  val mapView = remember {
+    MapView(context).apply {
+      id = R.id.map
     }
+  }
 
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(key1 = lifecycle, key2 = mapView) {
-        val lifecycleObserver = getMapLifecycleObserver(mapView)
-        lifecycle.addObserver(lifecycleObserver)
-        onDispose {
-            lifecycle.removeObserver(lifecycleObserver)
-        }
+  val lifecycle = LocalLifecycleOwner.current.lifecycle
+  DisposableEffect(key1 = lifecycle, key2 = mapView) {
+    val lifecycleObserver = getMapLifecycleObserver(mapView)
+    lifecycle.addObserver(lifecycleObserver)
+    onDispose {
+      lifecycle.removeObserver(lifecycleObserver)
     }
+  }
 
-    return mapView
+  return mapView
 }
 
 fun GoogleMap.setZoom(
-    @FloatRange(from = MinZoom.toDouble(), to = MaxZoom.toDouble()) zoom: Float
+  @FloatRange(from = MinZoom.toDouble(), to = MaxZoom.toDouble()) zoom: Float
 ) {
-    resetMinMaxZoomPreference()
-    setMinZoomPreference(zoom)
-    setMaxZoomPreference(zoom)
+  resetMinMaxZoomPreference()
+  setMinZoomPreference(zoom)
+  setMaxZoomPreference(zoom)
 }

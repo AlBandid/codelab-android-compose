@@ -65,144 +65,144 @@ import kotlinx.coroutines.launch
 internal const val KEY_ARG_DETAILS_CITY_NAME = "KEY_ARG_DETAILS_CITY_NAME"
 
 fun launchDetailsActivity(context: Context, item: ExploreModel) {
-    context.startActivity(createDetailsActivityIntent(context, item))
+  context.startActivity(createDetailsActivityIntent(context, item))
 }
 
 @VisibleForTesting
 fun createDetailsActivityIntent(context: Context, item: ExploreModel): Intent {
-    val intent = Intent(context, DetailsActivity::class.java)
-    intent.putExtra(KEY_ARG_DETAILS_CITY_NAME, item.city.name)
-    return intent
+  val intent = Intent(context, DetailsActivity::class.java)
+  intent.putExtra(KEY_ARG_DETAILS_CITY_NAME, item.city.name)
+  return intent
 }
 
 @AndroidEntryPoint
 class DetailsActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent {
-            CraneTheme {
-                Surface {
-                    DetailsScreen(
-                        onErrorLoading = { finish() },
-                        modifier = Modifier.systemBarsPadding()
-                    )
-                }
-            }
+    setContent {
+      CraneTheme {
+        Surface {
+          DetailsScreen(
+            onErrorLoading = { finish() },
+            modifier = Modifier.systemBarsPadding()
+          )
         }
+      }
     }
+  }
 }
 
 @Composable
 fun DetailsScreen(
-    onErrorLoading: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: DetailsViewModel = viewModel()
+  onErrorLoading: () -> Unit,
+  modifier: Modifier = Modifier,
+  viewModel: DetailsViewModel = viewModel()
 ) {
-    // TODO Codelab: produceState step - Show loading screen while fetching city details
-    val cityDetails = remember(viewModel) { viewModel.cityDetails }
-    if (cityDetails is Result.Success<ExploreModel>) {
-        DetailsContent(cityDetails.data, modifier.fillMaxSize())
-    } else {
-        onErrorLoading()
-    }
+  // TODO Codelab: produceState step - Show loading screen while fetching city details
+  val cityDetails = remember(viewModel) { viewModel.cityDetails }
+  if (cityDetails is Result.Success<ExploreModel>) {
+    DetailsContent(cityDetails.data, modifier.fillMaxSize())
+  } else {
+    onErrorLoading()
+  }
 }
 
 @Composable
 fun DetailsContent(
-    exploreModel: ExploreModel,
-    modifier: Modifier = Modifier
+  exploreModel: ExploreModel,
+  modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        Spacer(Modifier.height(32.dp))
-        Text(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = exploreModel.city.nameToDisplay,
-            style = MaterialTheme.typography.h4,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = exploreModel.description,
-            style = MaterialTheme.typography.h6,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(16.dp))
-        CityMapView(exploreModel.city.latitude, exploreModel.city.longitude)
-    }
+  Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+    Spacer(Modifier.height(32.dp))
+    Text(
+      modifier = Modifier.align(Alignment.CenterHorizontally),
+      text = exploreModel.city.nameToDisplay,
+      style = MaterialTheme.typography.h4,
+      textAlign = TextAlign.Center
+    )
+    Text(
+      modifier = Modifier.align(Alignment.CenterHorizontally),
+      text = exploreModel.description,
+      style = MaterialTheme.typography.h6,
+      textAlign = TextAlign.Center
+    )
+    Spacer(Modifier.height(16.dp))
+    CityMapView(exploreModel.city.latitude, exploreModel.city.longitude)
+  }
 }
 
 @Composable
 private fun CityMapView(latitude: String, longitude: String) {
-    // The MapView lifecycle is handled by this composable. As the MapView also needs to be updated
-    // with input from Compose UI, those updates are encapsulated into the MapViewContainer
-    // composable. In this way, when an update to the MapView happens, this composable won't
-    // recompose and the MapView won't need to be recreated.
-    val mapView = rememberMapViewWithLifecycle()
-    MapViewContainer(mapView, latitude, longitude)
+  // The MapView lifecycle is handled by this composable. As the MapView also needs to be updated
+  // with input from Compose UI, those updates are encapsulated into the MapViewContainer
+  // composable. In this way, when an update to the MapView happens, this composable won't
+  // recompose and the MapView won't need to be recreated.
+  val mapView = rememberMapViewWithLifecycle()
+  MapViewContainer(mapView, latitude, longitude)
 }
 
 @Composable
 private fun MapViewContainer(
-    map: MapView,
-    latitude: String,
-    longitude: String
+  map: MapView,
+  latitude: String,
+  longitude: String
 ) {
-    val cameraPosition = remember(latitude, longitude) {
-        LatLng(latitude.toDouble(), longitude.toDouble())
-    }
+  val cameraPosition = remember(latitude, longitude) {
+    LatLng(latitude.toDouble(), longitude.toDouble())
+  }
 
-    LaunchedEffect(map) {
-        val googleMap = map.awaitMap()
-        googleMap.addMarker { position(cameraPosition) }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition))
-    }
+  LaunchedEffect(map) {
+    val googleMap = map.awaitMap()
+    googleMap.addMarker { position(cameraPosition) }
+    googleMap.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition))
+  }
 
-    var zoom by rememberSaveable(map) { mutableStateOf(InitialZoom) }
-    ZoomControls(zoom) {
-        zoom = it.coerceIn(MinZoom, MaxZoom)
-    }
+  var zoom by rememberSaveable(map) { mutableStateOf(InitialZoom) }
+  ZoomControls(zoom) {
+    zoom = it.coerceIn(MinZoom, MaxZoom)
+  }
 
-    val coroutineScope = rememberCoroutineScope()
-    AndroidView({ map }) { mapView ->
-        // Reading zoom so that AndroidView recomposes when it changes. The getMapAsync lambda
-        // is stored for later, Compose doesn't recognize state reads
-        val mapZoom = zoom
-        coroutineScope.launch {
-            val googleMap = mapView.awaitMap()
-            googleMap.setZoom(mapZoom)
-            // Move camera to the same place to trigger the zoom update
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition))
-        }
+  val coroutineScope = rememberCoroutineScope()
+  AndroidView({ map }) { mapView ->
+    // Reading zoom so that AndroidView recomposes when it changes. The getMapAsync lambda
+    // is stored for later, Compose doesn't recognize state reads
+    val mapZoom = zoom
+    coroutineScope.launch {
+      val googleMap = mapView.awaitMap()
+      googleMap.setZoom(mapZoom)
+      // Move camera to the same place to trigger the zoom update
+      googleMap.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition))
     }
+  }
 }
 
 @Composable
 private fun ZoomControls(
-    zoom: Float,
-    onZoomChanged: (Float) -> Unit
+  zoom: Float,
+  onZoomChanged: (Float) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        ZoomButton("-", onClick = { onZoomChanged(zoom * 0.8f) })
-        ZoomButton("+", onClick = { onZoomChanged(zoom * 1.2f) })
-    }
+  Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+    ZoomButton("-", onClick = { onZoomChanged(zoom * 0.8f) })
+    ZoomButton("+", onClick = { onZoomChanged(zoom * 1.2f) })
+  }
 }
 
 @Composable
 private fun ZoomButton(text: String, onClick: () -> Unit) {
-    Button(
-        modifier = Modifier.padding(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.onPrimary,
-            contentColor = MaterialTheme.colors.primary
-        ),
-        onClick = onClick
-    ) {
-        Text(text = text, style = MaterialTheme.typography.h5)
-    }
+  Button(
+    modifier = Modifier.padding(8.dp),
+    colors = ButtonDefaults.buttonColors(
+      backgroundColor = MaterialTheme.colors.onPrimary,
+      contentColor = MaterialTheme.colors.primary
+    ),
+    onClick = onClick
+  ) {
+    Text(text = text, style = MaterialTheme.typography.h5)
+  }
 }
 
 private const val InitialZoom = 5f

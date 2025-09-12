@@ -60,106 +60,106 @@ import coil.request.ImageRequest.Builder
 
 @Composable
 fun ExploreSection(
-    modifier: Modifier = Modifier,
-    title: String,
-    exploreList: List<ExploreModel>,
-    onItemClicked: OnExploreItemClicked
+  modifier: Modifier = Modifier,
+  title: String,
+  exploreList: List<ExploreModel>,
+  onItemClicked: OnExploreItemClicked
 ) {
-    Surface(modifier = modifier.fillMaxSize(), color = Color.White, shape = BottomSheetShape) {
-        Column(modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 24.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.caption.copy(color = crane_caption)
-            )
-            Spacer(Modifier.height(8.dp))
-            // TODO Codelab: derivedStateOf step
-            // TODO: Show "Scroll to top" button when the first item of the list is not visible
-            val listState = rememberLazyListState()
-            ExploreList(exploreList, onItemClicked, listState = listState)
-        }
+  Surface(modifier = modifier.fillMaxSize(), color = Color.White, shape = BottomSheetShape) {
+    Column(modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 24.dp)) {
+      Text(
+        text = title,
+        style = MaterialTheme.typography.caption.copy(color = crane_caption)
+      )
+      Spacer(Modifier.height(8.dp))
+      // TODO Codelab: derivedStateOf step
+      // TODO: Show "Scroll to top" button when the first item of the list is not visible
+      val listState = rememberLazyListState()
+      ExploreList(exploreList, onItemClicked, listState = listState)
     }
+  }
 }
 
 @Composable
 private fun ExploreList(
-    exploreList: List<ExploreModel>,
-    onItemClicked: OnExploreItemClicked,
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState()
+  exploreList: List<ExploreModel>,
+  onItemClicked: OnExploreItemClicked,
+  modifier: Modifier = Modifier,
+  listState: LazyListState = rememberLazyListState()
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
-        state = listState
-    ) {
-        items(exploreList) { exploreItem ->
-            Column(Modifier.fillParentMaxWidth()) {
-                ExploreItem(
-                    modifier = Modifier.fillParentMaxWidth(),
-                    item = exploreItem,
-                    onItemClicked = onItemClicked
-                )
-                Divider(color = crane_divider_color)
-            }
-        }
+  LazyColumn(
+    modifier = modifier,
+    contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+    state = listState
+  ) {
+    items(exploreList) { exploreItem ->
+      Column(Modifier.fillParentMaxWidth()) {
+        ExploreItem(
+          modifier = Modifier.fillParentMaxWidth(),
+          item = exploreItem,
+          onItemClicked = onItemClicked
+        )
+        Divider(color = crane_divider_color)
+      }
     }
+  }
 }
 
 @Composable
 private fun ExploreItem(
-    modifier: Modifier = Modifier,
-    item: ExploreModel,
-    onItemClicked: OnExploreItemClicked
+  modifier: Modifier = Modifier,
+  item: ExploreModel,
+  onItemClicked: OnExploreItemClicked
 ) {
-    Row(
-        modifier = modifier
-            .clickable { onItemClicked(item) }
-            .padding(top = 12.dp, bottom = 12.dp)
-    ) {
-        ExploreImageContainer {
-            Box {
-                val painter = rememberAsyncImagePainter(
-                    model = Builder(LocalContext.current)
-                        .data(item.imageUrl)
-                        .crossfade(true)
-                        .build()
-                )
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize(),
-                )
+  Row(
+    modifier = modifier
+      .clickable { onItemClicked(item) }
+      .padding(top = 12.dp, bottom = 12.dp)
+  ) {
+    ExploreImageContainer {
+      Box {
+        val painter = rememberAsyncImagePainter(
+          model = Builder(LocalContext.current)
+            .data(item.imageUrl)
+            .crossfade(true)
+            .build()
+        )
+        Image(
+          painter = painter,
+          contentDescription = null,
+          contentScale = ContentScale.Crop,
+          modifier = Modifier.fillMaxSize(),
+        )
 
-                if (painter.state is AsyncImagePainter.State.Loading) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_crane_logo),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .align(Alignment.Center),
-                    )
-                }
-            }
+        if (painter.state is AsyncImagePainter.State.Loading) {
+          Image(
+            painter = painterResource(id = R.drawable.ic_crane_logo),
+            contentDescription = null,
+            modifier = Modifier
+              .size(36.dp)
+              .align(Alignment.Center),
+          )
         }
-        Spacer(Modifier.width(24.dp))
-        Column {
-            Text(
-                text = item.city.nameToDisplay,
-                style = MaterialTheme.typography.h6
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = item.description,
-                style = MaterialTheme.typography.caption.copy(color = crane_caption)
-            )
-        }
+      }
     }
+    Spacer(Modifier.width(24.dp))
+    Column {
+      Text(
+        text = item.city.nameToDisplay,
+        style = MaterialTheme.typography.h6
+      )
+      Spacer(Modifier.height(8.dp))
+      Text(
+        text = item.description,
+        style = MaterialTheme.typography.caption.copy(color = crane_caption)
+      )
+    }
+  }
 }
 
 @Composable
 private fun ExploreImageContainer(content: @Composable () -> Unit) {
-    Surface(Modifier.size(width = 60.dp, height = 60.dp), RoundedCornerShape(4.dp)) {
-        content()
-    }
+  Surface(Modifier.size(width = 60.dp, height = 60.dp), RoundedCornerShape(4.dp)) {
+    content()
+  }
 }

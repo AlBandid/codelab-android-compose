@@ -25,15 +25,15 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class CraneApplication : Application(), ImageLoaderFactory {
 
-    /**
-     * Create the singleton [ImageLoader].
-     * This is used by [rememberImagePainter] to load images in the app.
-     */
-    override fun newImageLoader(): ImageLoader {
-        return ImageLoader.Builder(this)
-            .components {
-                add(UnsplashSizingInterceptor)
-            }
-            .build()
-    }
+  /**
+   * Create the singleton [ImageLoader].
+   * This is used by [rememberImagePainter] to load images in the app.
+   */
+  override fun newImageLoader(): ImageLoader {
+    return ImageLoader.Builder(this)
+      .components {
+        add(UnsplashSizingInterceptor)
+      }
+      .build()
+  }
 }

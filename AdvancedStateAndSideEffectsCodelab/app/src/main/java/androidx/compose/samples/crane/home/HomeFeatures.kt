@@ -28,50 +28,50 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FlySearchContent(
-    onPeopleChanged: (Int) -> Unit,
-    onToDestinationChanged: (String) -> Unit
+  onPeopleChanged: (Int) -> Unit,
+  onToDestinationChanged: (String) -> Unit
 ) {
-    CraneSearch {
-        PeopleUserInput(
-            titleSuffix = ", Economy",
-            onPeopleChanged = onPeopleChanged
-        )
-        Spacer(Modifier.height(8.dp))
-        FromDestination()
-        Spacer(Modifier.height(8.dp))
-        ToDestinationUserInput(onToDestinationChanged = onToDestinationChanged)
-        Spacer(Modifier.height(8.dp))
-        DatesUserInput()
-    }
+  CraneSearch {
+    PeopleUserInput(
+      titleSuffix = ", Economy",
+      onPeopleChanged = onPeopleChanged
+    )
+    Spacer(Modifier.height(8.dp))
+    FromDestination()
+    Spacer(Modifier.height(8.dp))
+    ToDestinationUserInput(onToDestinationChanged = onToDestinationChanged)
+    Spacer(Modifier.height(8.dp))
+    DatesUserInput()
+  }
 }
 
 @Composable
 fun SleepSearchContent(onPeopleChanged: (Int) -> Unit) {
-    CraneSearch {
-        PeopleUserInput(onPeopleChanged = onPeopleChanged)
-        Spacer(Modifier.height(8.dp))
-        DatesUserInput()
-        Spacer(Modifier.height(8.dp))
-        SimpleUserInput(caption = "Select Location", vectorImageId = R.drawable.ic_hotel)
-    }
+  CraneSearch {
+    PeopleUserInput(onPeopleChanged = onPeopleChanged)
+    Spacer(Modifier.height(8.dp))
+    DatesUserInput()
+    Spacer(Modifier.height(8.dp))
+    SimpleUserInput(caption = "Select Location", vectorImageId = R.drawable.ic_hotel)
+  }
 }
 
 @Composable
 fun EatSearchContent(onPeopleChanged: (Int) -> Unit) {
-    CraneSearch {
-        PeopleUserInput(onPeopleChanged = onPeopleChanged)
-        Spacer(Modifier.height(8.dp))
-        DatesUserInput()
-        Spacer(Modifier.height(8.dp))
-        SimpleUserInput(caption = "Select Time", vectorImageId = R.drawable.ic_time)
-        Spacer(Modifier.height(8.dp))
-        SimpleUserInput(caption = "Select Location", vectorImageId = R.drawable.ic_restaurant)
-    }
+  CraneSearch {
+    PeopleUserInput(onPeopleChanged = onPeopleChanged)
+    Spacer(Modifier.height(8.dp))
+    DatesUserInput()
+    Spacer(Modifier.height(8.dp))
+    SimpleUserInput(caption = "Select Time", vectorImageId = R.drawable.ic_time)
+    Spacer(Modifier.height(8.dp))
+    SimpleUserInput(caption = "Select Location", vectorImageId = R.drawable.ic_restaurant)
+  }
 }
 
 @Composable
 private fun CraneSearch(content: @Composable () -> Unit) {
-    Column(Modifier.padding(start = 24.dp, top = 0.dp, end = 24.dp, bottom = 12.dp)) {
-        content()
-    }
+  Column(Modifier.padding(start = 24.dp, top = 0.dp, end = 24.dp, bottom = 12.dp)) {
+    content()
+  }
 }

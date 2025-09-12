@@ -37,26 +37,26 @@ private val screens = listOf("Find Trips", "My Trips", "Saved Trips", "Price Ale
 
 @Composable
 fun CraneDrawer(modifier: Modifier = Modifier) {
-    Column(
-        modifier
-            .fillMaxSize()
-            .padding(start = 24.dp, top = 48.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_crane_drawer),
-            contentDescription = stringResource(R.string.cd_drawer)
-        )
-        for (screen in screens) {
-            Spacer(Modifier.height(24.dp))
-            Text(text = screen, style = MaterialTheme.typography.h4)
-        }
+  Column(
+    modifier
+      .fillMaxSize()
+      .padding(start = 24.dp, top = 48.dp)
+  ) {
+    Image(
+      painter = painterResource(R.drawable.ic_crane_drawer),
+      contentDescription = stringResource(R.string.cd_drawer)
+    )
+    for (screen in screens) {
+      Spacer(Modifier.height(24.dp))
+      Text(text = screen, style = MaterialTheme.typography.h4)
     }
+  }
 }
 
 @Preview
 @Composable
 fun CraneDrawerPreview() {
-    CraneTheme {
-        CraneDrawer()
-    }
+  CraneTheme {
+    CraneDrawer()
+  }
 }
