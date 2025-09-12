@@ -38,46 +38,46 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun <T> StatementBody(
-    modifier: Modifier = Modifier,
-    items: List<T>,
-    colors: (T) -> Color,
-    amounts: (T) -> Float,
-    amountsTotal: Float,
-    circleLabel: String,
-    rows: @Composable (T) -> Unit
+  modifier: Modifier = Modifier,
+  items: List<T>,
+  colors: (T) -> Color,
+  amounts: (T) -> Float,
+  amountsTotal: Float,
+  circleLabel: String,
+  rows: @Composable (T) -> Unit
 ) {
-    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-        Box(Modifier.padding(16.dp)) {
-            val accountsProportion = items.extractProportions { amounts(it) }
-            val circleColors = items.map { colors(it) }
-            AnimatedCircle(
-                accountsProportion,
-                circleColors,
-                Modifier
-                    .height(300.dp)
-                    .align(Alignment.Center)
-                    .fillMaxWidth()
-            )
-            Column(modifier = Modifier.align(Alignment.Center)) {
-                Text(
-                    text = circleLabel,
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-                Text(
-                    text = formatAmount(amountsTotal),
-                    style = MaterialTheme.typography.h2,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            }
-        }
-        Spacer(Modifier.height(10.dp))
-        Card {
-            Column(modifier = Modifier.padding(12.dp)) {
-                items.forEach { item ->
-                    rows(item)
-                }
-            }
-        }
+  Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+    Box(Modifier.padding(16.dp)) {
+      val accountsProportion = items.extractProportions { amounts(it) }
+      val circleColors = items.map { colors(it) }
+      AnimatedCircle(
+        accountsProportion,
+        circleColors,
+        Modifier
+          .height(300.dp)
+          .align(Alignment.Center)
+          .fillMaxWidth()
+      )
+      Column(modifier = Modifier.align(Alignment.Center)) {
+        Text(
+          text = circleLabel,
+          style = MaterialTheme.typography.body1,
+          modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(
+          text = formatAmount(amountsTotal),
+          style = MaterialTheme.typography.h2,
+          modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+      }
     }
+    Spacer(Modifier.height(10.dp))
+    Card {
+      Column(modifier = Modifier.padding(12.dp)) {
+        items.forEach { item ->
+          rows(item)
+        }
+      }
+    }
+  }
 }

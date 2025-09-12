@@ -36,30 +36,30 @@ import com.example.compose.rally.ui.theme.RallyTheme
  * https://material.io/design/material-studies/rally.html
  */
 class RallyActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            RallyApp()
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      RallyApp()
     }
+  }
 }
 
 @Composable
 fun RallyApp() {
-    RallyTheme {
-        var currentScreen: RallyDestination by remember { mutableStateOf(Overview) }
-        Scaffold(
-            topBar = {
-                RallyTabRow(
-                    allScreens = rallyTabRowScreens,
-                    onTabSelected = { screen -> currentScreen = screen },
-                    currentScreen = currentScreen
-                )
-            }
-        ) { innerPadding ->
-            Box(Modifier.padding(innerPadding)) {
-                currentScreen.screen()
-            }
-        }
+  RallyTheme {
+    var currentScreen: RallyDestination by remember { mutableStateOf(Overview) }
+    Scaffold(
+      topBar = {
+        RallyTabRow(
+          allScreens = rallyTabRowScreens,
+          onTabSelected = { screen -> currentScreen = screen },
+          currentScreen = currentScreen
+        )
+      }
+    ) { innerPadding ->
+      Box(Modifier.padding(innerPadding)) {
+        currentScreen.screen()
+      }
     }
+  }
 }

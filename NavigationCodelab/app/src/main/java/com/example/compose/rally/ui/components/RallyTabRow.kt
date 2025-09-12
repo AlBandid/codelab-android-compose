@@ -50,72 +50,72 @@ import java.util.Locale
 
 @Composable
 fun RallyTabRow(
-    allScreens: List<RallyDestination>,
-    onTabSelected: (RallyDestination) -> Unit,
-    currentScreen: RallyDestination
+  allScreens: List<RallyDestination>,
+  onTabSelected: (RallyDestination) -> Unit,
+  currentScreen: RallyDestination
 ) {
-    Surface(
-        Modifier
-            .height(TabHeight)
-            .fillMaxWidth()
-    ) {
-        Row(Modifier.selectableGroup()) {
-            allScreens.forEach { screen ->
-                RallyTab(
-                    text = screen.route,
-                    icon = screen.icon,
-                    onSelected = { onTabSelected(screen) },
-                    selected = currentScreen == screen
-                )
-            }
-        }
+  Surface(
+    Modifier
+      .height(TabHeight)
+      .fillMaxWidth()
+  ) {
+    Row(Modifier.selectableGroup()) {
+      allScreens.forEach { screen ->
+        RallyTab(
+          text = screen.route,
+          icon = screen.icon,
+          onSelected = { onTabSelected(screen) },
+          selected = currentScreen == screen
+        )
+      }
     }
+  }
 }
 
 @Composable
 private fun RallyTab(
-    text: String,
-    icon: ImageVector,
-    onSelected: () -> Unit,
-    selected: Boolean
+  text: String,
+  icon: ImageVector,
+  onSelected: () -> Unit,
+  selected: Boolean
 ) {
-    val color = MaterialTheme.colors.onSurface
-    val durationMillis = if (selected) TabFadeInAnimationDuration else TabFadeOutAnimationDuration
-    val animSpec = remember {
-        tween<Color>(
-            durationMillis = durationMillis,
-            easing = LinearEasing,
-            delayMillis = TabFadeInAnimationDelay
-        )
-    }
-    val tabTintColor by animateColorAsState(
-        targetValue = if (selected) color else color.copy(alpha = InactiveTabOpacity),
-        animationSpec = animSpec
+  val color = MaterialTheme.colors.onSurface
+  val durationMillis = if (selected) TabFadeInAnimationDuration else TabFadeOutAnimationDuration
+  val animSpec = remember {
+    tween<Color>(
+      durationMillis = durationMillis,
+      easing = LinearEasing,
+      delayMillis = TabFadeInAnimationDelay
     )
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .animateContentSize()
-            .height(TabHeight)
-            .selectable(
-                selected = selected,
-                onClick = onSelected,
-                role = Role.Tab,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    bounded = false,
-                    radius = Dp.Unspecified,
-                    color = Color.Unspecified
-                )
-            )
-            .clearAndSetSemantics { contentDescription = text }
-    ) {
-        Icon(imageVector = icon, contentDescription = text, tint = tabTintColor)
-        if (selected) {
-            Spacer(Modifier.width(12.dp))
-            Text(text.uppercase(Locale.getDefault()), color = tabTintColor)
-        }
+  }
+  val tabTintColor by animateColorAsState(
+    targetValue = if (selected) color else color.copy(alpha = InactiveTabOpacity),
+    animationSpec = animSpec
+  )
+  Row(
+    modifier = Modifier
+      .padding(16.dp)
+      .animateContentSize()
+      .height(TabHeight)
+      .selectable(
+        selected = selected,
+        onClick = onSelected,
+        role = Role.Tab,
+        interactionSource = remember { MutableInteractionSource() },
+        indication = ripple(
+          bounded = false,
+          radius = Dp.Unspecified,
+          color = Color.Unspecified
+        )
+      )
+      .clearAndSetSemantics { contentDescription = text }
+  ) {
+    Icon(imageVector = icon, contentDescription = text, tint = tabTintColor)
+    if (selected) {
+      Spacer(Modifier.width(12.dp))
+      Text(text.uppercase(Locale.getDefault()), color = tabTintColor)
     }
+  }
 }
 
 private val TabHeight = 56.dp
